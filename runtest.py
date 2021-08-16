@@ -19,6 +19,18 @@ def runkadt(cmmd):
 def runksec(cmmd):
     os.system('kubesec scan k8s-deployment.yml')
 
+def getIPaddress():
+    ipcmd =" arp -a | grep 'eth0' | awk '{print $2}' | awk '{print substr ($0,2,length($0) - 2)}' "
+    os.system(ipcmd + ' > ipaddress.txt ')
+    os.system('cat ipaddress.txt')
+    print("In get IP address")
+
+def runnmap():
+        nmapcmd = 'nmap -T4 -p- -A -script vuln -iL ipaddress.txt -oN nmapVulnResults'
+        os.system(nmapcmd)
+        print('inside nmap run ')
+        os.system('cat nmapVulnResults')
+
 if __name__ == "__main__":
     import sys
     import json
@@ -31,4 +43,6 @@ if __name__ == "__main__":
     print(data['cfgloc'])
     runkh(data['scanopt'], data['ipadd'])
     runkb(data['target'], data['cfgloc'])
+    getIPaddress()
+    runnmap()
 #    runksec(1)
