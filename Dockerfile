@@ -8,7 +8,8 @@ ADD kbstuff/kube-bench_0.6.3_linux_amd64.tar.gz .
 
 RUN apt-get update
 RUN apt-get upgrade
-RUN apt-get install nmap
+#RUN apt-get install nmap
+RUN apt-get -y install curl
 RUN pip install kube-hunter
 RUN apt-get update && apt-get install -y procps
 RUN mkdir /app/output

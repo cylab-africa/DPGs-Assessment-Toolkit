@@ -1,0 +1,46 @@
+
+Nodes
++-------------+-------------+
+| TYPE        | LOCATION    |
++-------------+-------------+
+| Node/Master | 10.20.20.99 |
++-------------+-------------+
+
+Detected Services
++-------------+-------------------+----------------------+
+| SERVICE     | LOCATION          | DESCRIPTION          |
++-------------+-------------------+----------------------+
+| Kubelet API | 10.20.20.99:10250 | The Kubelet is the   |
+|             |                   | main component in    |
+|             |                   | every Node, all pod  |
+|             |                   | operations goes      |
+|             |                   | through the kubelet  |
++-------------+-------------------+----------------------+
+| Etcd        | 10.20.20.99:2379  | Etcd is a DB that    |
+|             |                   | stores cluster's     |
+|             |                   | data, it contains    |
+|             |                   | configuration and    |
+|             |                   | current              |
+|             |                   |     state            |
+|             |                   | information, and     |
+|             |                   | might contain        |
+|             |                   | secrets              |
++-------------+-------------------+----------------------+
+| API Server  | 10.20.20.99:6443  | The API server is in |
+|             |                   | charge of all        |
+|             |                   | operations on the    |
+|             |                   | cluster.             |
++-------------+-------------------+----------------------+
+
+Vulnerabilities
+For further information about a vulnerability, search its ID in: 
+https://avd.aquasec.com/
++--------+------------------+----------------------+----------------------+----------------------+----------+
+| ID     | LOCATION         | CATEGORY             | VULNERABILITY        | DESCRIPTION          | EVIDENCE |
++--------+------------------+----------------------+----------------------+----------------------+----------+
+| KHV002 | 10.20.20.99:6443 | Information          | K8s Version          | The kubernetes       | v1.19.0  |
+|        |                  | Disclosure           | Disclosure           | version could be     |          |
+|        |                  |                      |                      | obtained from the    |          |
+|        |                  |                      |                      | /version endpoint    |          |
++--------+------------------+----------------------+----------------------+----------------------+----------+
+

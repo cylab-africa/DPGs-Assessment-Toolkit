@@ -17,7 +17,7 @@ def runkadt(cmmd):
     pass
 
 def runksec(cmmd):
-    kseccmd = 'curl -sSX POST --data-binary @"kube-apiserver.yaml" https://v2.kubesec.io/scan'
+    kseccmd = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-apiserver.yaml" https://v2.kubesec.io/scan'
     os.system(kseccmd + ' > /app/dir/output/ksec.txt')
     print('Run Kubesec')
 
@@ -45,6 +45,7 @@ if __name__ == "__main__":
     print(data['cfgloc'])
     runkh(data['scanopt'], data['ipadd'])
     runkb(data['target'], data['cfgloc'])
+    runksec(1)
 #    getIPaddress()
 #    runnmap()
 #    runksec(1)
