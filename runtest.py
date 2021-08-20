@@ -6,18 +6,20 @@ import sys
 def runkh(option, ipadd):
     khcmd = 'kube-hunter ' + option + ' ' + ipadd
     os.system(khcmd + ' > /app/dir/output/kh.txt')
-    print('Hello World')
+    print('Run Kube-Hunter')
 
 def runkb(target, cfgloc):
     kbcmd = './kube-bench run --targets=' + target + ' --config-dir ' + cfgloc
     os.system(kbcmd + ' > /app/dir/output/kb.txt')
-    print('Hello World 2')
+    print('Run Kube-Bench')
 
 def runkadt(cmmd):
     pass
 
 def runksec(cmmd):
-    os.system('kubesec scan k8s-deployment.yml')
+    kseccmd = 'curl -sSX POST --data-binary @"kube-apiserver.yaml" https://v2.kubesec.io/scan'
+    os.system(kseccmd + ' > /app/dir/output/ksec.txt')
+    print('Run Kubesec')
 
 def getIPaddress():
     ipcmd =" arp -a | grep 'eth0' | awk '{print $2}' | awk '{print substr ($0,2,length($0) - 2)}' "
@@ -43,6 +45,6 @@ if __name__ == "__main__":
     print(data['cfgloc'])
     runkh(data['scanopt'], data['ipadd'])
     runkb(data['target'], data['cfgloc'])
-    getIPaddress()
-    runnmap()
+#    getIPaddress()
+#    runnmap()
 #    runksec(1)
