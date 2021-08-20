@@ -1,0 +1,6 @@
+{
+	"scanopt": "--remote",
+	"ipadd": "10.20.20.99",
+        "target": "master",
+        "cfgloc": "/app/cfg"
+}
