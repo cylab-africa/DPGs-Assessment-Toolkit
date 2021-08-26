@@ -14,12 +14,26 @@ def runkb(target, cfgloc):
     print('Run Kube-Bench')
 
 def runkadt(cmmd):
-    pass
+    kadtcmd = './kubeaudit all -f "/etc/kubernetes/manifests/kube-scheduler.yaml"'
+    os.system(kadtcmd + ' > /app/dir/output/kadt.txt')
+    print('Run Kubeaudit')
 
 def runksec(cmmd):
-    kseccmd = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-apiserver.yaml" https://v2.kubesec.io/scan'
-    os.system(kseccmd + ' > /app/dir/output/ksec.txt')
+    f = open("/app/dir/output/ksec.txt", "w")
+    kseccmdAPI = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-apiserver.yaml" https://v2.kubesec.io/scan'
+    kseccmdETCD = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/etcd.yaml" https://v2.kubesec.io/scan'
+    kseccmdCM = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-controller-manager.yaml" https://v2.kubesec.io/scan'
+    kseccmdSCH = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-scheduler.yaml" https://v2.kubesec.io/scan'
+    writeksec('API', kseccmdAPI, f)
+    writeksec('ETCD', kseccmdETCD, f)
+    writeksec('Controller-Manager', kseccmdCM, f)
+    writeksec('Scheduler', kseccmdSCH, f)
+    f.close()
     print('Run Kubesec')
+
+def writeksec(manifest, cmd, f):
+    header = "Kubesec " + manifest + " Check:\n-------------------------------------------"
+    os.system(cmd + ' >> /app/dir/output/ksec.txt')
 
 def getIPaddress():
     ipcmd =" arp -a | grep 'eth0' | awk '{print $2}' | awk '{print substr ($0,2,length($0) - 2)}' "
@@ -46,6 +60,7 @@ if __name__ == "__main__":
     runkh(data['scanopt'], data['ipadd'])
     runkb(data['target'], data['cfgloc'])
     runksec(1)
+    runkadt(1)
 #    getIPaddress()
 #    runnmap()
 #    runksec(1)
