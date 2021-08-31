@@ -2,5 +2,8 @@
 	"scanopt": "--remote",
 	"ipadd": "10.20.20.99",
         "target": "master",
-        "cfgloc": "/app/cfg"
+        "cfgloc": "/app/cfg",
+	"auditmode": "-f",
+	"pathsec": "/etc/kubernetes/manifests/kube-apiserver.yaml",
+	"pathaudit": "/etc/kubernetes/manifests/kube-controller-manager.yaml"
 }

@@ -13,14 +13,14 @@ def runkb(target, cfgloc):
     os.system(kbcmd + ' > /app/dir/output/kb.txt')
     print('Run Kube-Bench')
 
-def runkadt(cmmd):
-    kadtcmd = './kubeaudit all -f "/etc/kubernetes/manifests/kube-scheduler.yaml"'
+def runkadt(pathaudit, auditmode):
+    kadtcmd = './kubeaudit all ' + auditmode + ' "' + pathaudit + '"'
     os.system(kadtcmd + ' > /app/dir/output/kadt.txt')
     print('Run Kubeaudit')
 
-def runksec(cmmd):
+def runksec(pathsec):
     f = open("/app/dir/output/ksec.txt", "w")
-    kseccmdAPI = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-apiserver.yaml" https://v2.kubesec.io/scan'
+    kseccmdAPI = 'curl -sSX POST --data-binary @"' + pathsec + '" https://v2.kubesec.io/scan'
     kseccmdETCD = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/etcd.yaml" https://v2.kubesec.io/scan'
     kseccmdCM = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-controller-manager.yaml" https://v2.kubesec.io/scan'
     kseccmdSCH = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-scheduler.yaml" https://v2.kubesec.io/scan'
@@ -57,10 +57,13 @@ if __name__ == "__main__":
     print(data['ipadd'])
     print(data['target'])
     print(data['cfgloc'])
+    print(data['auditmode'])
+    print(data['pathsec'])
+    print(data['pathaudit'])
     runkh(data['scanopt'], data['ipadd'])
     runkb(data['target'], data['cfgloc'])
-    runksec(1)
-    runkadt(1)
+    runksec(data['pathsec'])
+    runkadt(data['pathaudit'], data['auditmode'])
 #    getIPaddress()
 #    runnmap()
 #    runksec(1)
