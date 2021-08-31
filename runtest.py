@@ -21,13 +21,13 @@ def runkadt(pathaudit, auditmode):
 def runksec(pathsec):
     f = open("/app/dir/output/ksec.txt", "w")
     kseccmdAPI = 'curl -sSX POST --data-binary @"' + pathsec + '" https://v2.kubesec.io/scan'
-    kseccmdETCD = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/etcd.yaml" https://v2.kubesec.io/scan'
-    kseccmdCM = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-controller-manager.yaml" https://v2.kubesec.io/scan'
-    kseccmdSCH = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-scheduler.yaml" https://v2.kubesec.io/scan'
+#    kseccmdETCD = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/etcd.yaml" https://v2.kubesec.io/scan'
+#    kseccmdCM = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-controller-manager.yaml" https://v2.kubesec.io/scan'
+#    kseccmdSCH = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-scheduler.yaml" https://v2.kubesec.io/scan'
     writeksec('API', kseccmdAPI, f)
-    writeksec('ETCD', kseccmdETCD, f)
-    writeksec('Controller-Manager', kseccmdCM, f)
-    writeksec('Scheduler', kseccmdSCH, f)
+#    writeksec('ETCD', kseccmdETCD, f)
+#    writeksec('Controller-Manager', kseccmdCM, f)
+#    writeksec('Scheduler', kseccmdSCH, f)
     f.close()
     print('Run Kubesec')
 
