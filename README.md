@@ -16,4 +16,3 @@ To run the tool based on the repo:
 
 1. Build docker image: docker build -t imagename .
 2. Run docker image: docker run --pid=host -v `pwd`:/app/dir -v /var:/var:ro -v /etc/systemd:/etc/systemd:ro -v /srv/kubernetes:/srv/kubernetes:ro -v /etc/kubernetes:/etc/kubernetes:ro -v /usr/bin/:/usr/local/mount-from-host/bin:ro -v /etc/cni/net.d/:/etc/cni/net.d:ro -v /opt/cni/bin:/opt/cni/bin:ro --optname <optionalname> --rm -it imagename args/args.json
-   -In these commands image name is the name of the image you built
