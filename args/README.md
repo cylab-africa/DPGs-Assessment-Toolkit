@@ -1,4 +1,4 @@
-This file explains the parameters for this Tool
+This file explains the parameters for this Tool:
 
 scanopt: Kube-hunter scanning method. The default is remote which is used to scan an IP address.  
 ipadd: IP Address.  
