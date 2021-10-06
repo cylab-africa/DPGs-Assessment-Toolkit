@@ -21,13 +21,7 @@ def runkadt(pathaudit, auditmode):
 def runksec(pathsec):
     f = open("/app/dir/output/ksec.txt", "w")
     kseccmdAPI = 'curl -sSX POST --data-binary @"' + pathsec + '" https://v2.kubesec.io/scan'
-#    kseccmdETCD = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/etcd.yaml" https://v2.kubesec.io/scan'
-#    kseccmdCM = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-controller-manager.yaml" https://v2.kubesec.io/scan'
-#    kseccmdSCH = 'curl -sSX POST --data-binary @"/etc/kubernetes/manifests/kube-scheduler.yaml" https://v2.kubesec.io/scan'
     writeksec('API', kseccmdAPI, f)
-#    writeksec('ETCD', kseccmdETCD, f)
-#    writeksec('Controller-Manager', kseccmdCM, f)
-#    writeksec('Scheduler', kseccmdSCH, f)
     f.close()
     print('Run Kubesec')
 
@@ -35,20 +29,7 @@ def writeksec(manifest, cmd, f):
     header = "Kubesec " + manifest + " Check:\n-------------------------------------------"
     os.system(cmd + ' >> /app/dir/output/ksec.txt')
 
-def getIPaddress():
-    ipcmd =" arp -a | grep 'eth0' | awk '{print $2}' | awk '{print substr ($0,2,length($0) - 2)}' "
-    os.system(ipcmd + ' > ipaddress.txt ')
-    os.system('cat ipaddress.txt')
-    print("In get IP address")
-
-def runnmap():
-        nmapcmd = 'nmap -T4 -p- -A -script vuln -iL ipaddress.txt -oN nmapVulnResults'
-        os.system(nmapcmd)
-        print('inside nmap run ')
-        os.system('cat nmapVulnResults')
-
 if __name__ == "__main__":
-    import sys
     import json
     path = '/app/dir/' + sys.argv[1]
     f = open(path)
@@ -64,6 +45,3 @@ if __name__ == "__main__":
     runkb(data['target'], data['cfgloc'])
     runksec(data['pathsec'])
     runkadt(data['pathaudit'], data['auditmode'])
-#    getIPaddress()
-#    runnmap()
-#    runksec(1)
