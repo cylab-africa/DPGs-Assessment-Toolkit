@@ -1,0 +1,55 @@
+version: '3.4'
+
+
+networks:
+  dpgnet:
+    ipam:
+      config:
+        - subnet: 172.50.0.0/16
+
+services:
+
+
+  gvm:
+    networks:
+      dpgnet:
+        ipv4_address: 172.50.0.3
+    build:
+      context: ./gvm
+      dockerfile: Dockerfile
+    container_name: gvm
+    ports:
+      - "443:9392"
+      - "2222:22"
+    env_file:
+      - ./gvm/config/local.env
+    volumes:
+      - ./gvm/config:/config
+      - ./gvm/scripts:/scripts
+      - gvm_data:/usr/local/var/lib
+      - gvm_db:/var/lib/postgresql/data
+    tty: true
+
+      
+  main:
+    networks:
+      dpgnet:
+        ipv4_address: 172.50.0.2
+    build:
+      context: ./main
+      dockerfile: Dockerfile
+    container_name: main
+    env_file:
+      - ./main/main.env
+    tty: true
+  
+  
+
+volumes:
+  gvm_data:
+    name: gvm_data
+  gvm_db:
+    name: gvm_db
+    
+    
+
