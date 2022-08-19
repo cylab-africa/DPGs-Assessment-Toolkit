@@ -1,0 +1,23 @@
+#!/usr/bin/with-contenv bash
+
+sleep 5
+echo "Attempting to migrate database and create default user"
+#s6-setuidgid abc gvmd gvm-manage-certs -q -a &> /dev/nul || true
+s6-setuidgid abc gvmd --migrate || true
+s6-setuidgid abc gvmd --create-user=${GVM_USER} --password=${GVM_PASSWORD} || true
+
+echo "Attempting to set max report rows to $GVMD_MAXROWS"
+s6-setuidgid abc gvmd --modify-setting 76374a7a-0569-11e6-b6da-28d24461215b --value $GVMD_MAXROWS || true
+
+UUID=$(s6-setuidgid abc gvmd --get-users --verbose | grep $GVM_USER | awk '{print $2}')
+echo "Granting feed import owner rights to default user ($GVM_USER) with UUID $UUID"
+s6-setuidgid abc gvmd --modify-setting 78eceaec-3385-11ea-b237-28d24461215b --value $UUID || true
+
+while  [ ! -S /var/run/ospd/ospd.sock ]; do
+	echo "Greenbone Vulnerability Manager - waiting for OSPD..."
+	sleep 10
+done
+
+echo "Starting Greenbone Vulnerability Manager..."
+
+exec s6-setuidgid abc gvmd --max-ips-per-target=$GVMD_MAX_IPS_PER_TARGET --foreground
