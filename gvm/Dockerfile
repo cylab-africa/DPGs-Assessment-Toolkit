@@ -8,8 +8,8 @@ RUN echo 'gvmuser ALL=(ALL) NOPASSWD: ALL'>> /etc/sudoers
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 RUN service ssh start
 RUN pip3 install gvm-tools
-#RUN sleep 600
-#RUN chmod 777 /usr/local/var/run/gvmd.sock
+RUN sleep 600
+RUN chmod 777 /usr/local/var/run/gvmd.sock
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 # create user and install ssh
