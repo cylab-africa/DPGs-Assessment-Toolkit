@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 USER root
-RUN echo "Built !!!!!"
-RUN apt update -y  --fix-missing && apt upgrade -y
+#RUN echo "Built !!!!!"
+RUN apt update -y  --fix-missing &&  apt upgrade -y
 RUN apt install -y apt-utils
 RUN apt install -y sqlmap
 RUN apt install -y net-tools nmap wget curl git sudo
@@ -26,6 +26,8 @@ RUN python3 --version
 WORKDIR /home/user/kube-hunter
 RUN pip3 install -r requirements.txt
 #RUN python3 kube-hunter.py --help
+WORKDIR /home/user/
+COPY ./pyssh.py /home/user/
 RUN wget 'https://github.com/controlplaneio/kubesec/releases/download/v2.11.5/kubesec_linux_amd64.tar.gz'
 RUN mkdir ./kubesec
 RUN tar -xvf kubesec_linux_amd64.tar.gz -C ./kubesec
@@ -40,7 +42,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Africa/Cairo
 RUN apt-get install -y tzdata
 
-RUN apt install -y rsync software-properties-common
+RUN apt update && apt install -y rsync software-properties-common
 RUN add-apt-repository ppa:openjdk-r/ppa && apt-get update
 
 
@@ -61,9 +63,23 @@ RUN bash zap.sh  -help
 RUN sudo apt-get install -y software-properties-common sqlite3
 
 RUN sudo apt install python3 python3-pip
-RUN pip3 install python-gvm paramiko
-RUN sudo apt install-y nano
-WORKDIR /home/user
-RUN mkdir /home/user/output
+RUN pip3 install python-gvm paramiko scp
+RUN sudo apt install -y nano at
+#RUN sudo systemctl enable --now atd.service
+RUN sudo update-rc.d atd defaults
+#RUN sudo service atd restart
+#RUN sudo service atd enable
+WORKDIR /home/user/
+ENV ALL_IP="172.29.108.11 172.29.108.12 172.29.108.13 172.29.108.14 172.29.108.15 172.29.108.16 172.29.108.17 172.29.108.19"
+ENV CONSOLE=172.29.108.11
+ENV GVM_USER=admin
+ENV GVM_PASSWORD=admin
+RUN mkdir /home/user/output/
 RUN mkdir /home/user/output/nmap
-RUN nmap -sV -sT -A -p- -T4 -Pn $ALL_IP -oG  /home/user/output/nmap/fullscan.txt
+RUN mkdir /home/user/output/gvm/
+RUN mkdir /home/user/output/zap/
+RUN mkdir /home/user/output/kube-hunter/
+RUN echo $ALL_IP
+COPY ./assessment.sh /home/user/assessment.sh
+RUN sudo chmod +x /home/user/assessment.sh
+CMD echo hha && /home/user/assessment.sh

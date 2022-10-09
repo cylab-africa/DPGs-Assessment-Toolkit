@@ -1,18 +1,23 @@
-# Container_Tool
+# DPGs Assessment Toolkit
 
-This is the github page for the MOSIP's Container Assessment tool
+# Installation
 
-Currently, the tool contains functionality for four Kubernetes Assessment Tools: `Kube-hunter`, `Kube-bench`, `Kubesec`, `Kubeaudit`
+### Clone the repository
+```
+git clone https://github.com/cylab-africa/MOSIP_Kubernetes_Assessment_Tool
+```
 
-`Kube-hunter` is used for penetration-testing and does IP based scan of the Kubernetes nodes and looks for potential vulnerabilies.  
-`Kube-bench` runs tests based on whether the Kubernetes deployment meets CIS benchmark requirements.  
-`Kubesec` is a security anaylsis tool for kubernetes resources. Has a scoring systeming not is not fully explained in documentation.  
-`Kubeaudit` audits various Kubernetes Clusters for security concerns by wither looking at the manifest or config files of the cluster.  
+# Setup
+1. In `gvm/config/local.env` edit the `GVM_PASSWORD` environment variable on line 12 to set you own password and etit the timezone (TZ) variable.
+2. Set the `SMTP_HOST`, `SMTP_MASQ` and `SMTP_PORT` variables with your SMTP server informations (optional)
+3. In `main/main.env` set your timezone and the MOSIP console IP
+4. In `Dockerfile`, edit the line `ENV ALL_IP="ip1 ip2 ip3"` where IP1, IP2, etc are the list of your MOSIP VMs IPs 
+5. In gvm/Dockerfile edit the  `RUN echo "gvmuser:gvmpass" | chpasswd` line and replace gvm pass by a custom password
 
-The Container Assessment Tool takes a list of arguments from a json file named args.json in directory args.  
-The tool puts the outputs of each tool into text files in the output directory
 
-To run the tool based on the repo:
+# Build and run
 
-1. Build docker image: `docker build -t imagename` .
-2. Run docker image: docker run --pid=host -v `pwd`:/app/dir -v /var:/var:ro -v /etc/systemd:/etc/systemd:ro -v /srv/kubernetes:/srv/kubernetes:ro -v /etc/kubernetes:/etc/kubernetes:ro -v /usr/bin/:/usr/local/mount-from-host/bin:ro -v /etc/cni/net.d/:/etc/cni/net.d:ro -v /opt/cni/bin:/opt/cni/bin:ro --optname <optionalname> --rm -it imagename args/args.json
+```
+docker-compose up -d --build
+docker ps
+```
